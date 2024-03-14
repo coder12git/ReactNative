@@ -30,7 +30,7 @@ const DataEntryForm = () => {
 
   const handleSubmit = () => {
     // console.log('Form data:', formData);
-    navigation.navigate('DataVisualization');
+    navigation.navigate('DataVisualization', {formData: formData});
   };
 
   return (
