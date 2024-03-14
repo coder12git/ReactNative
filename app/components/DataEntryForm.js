@@ -1,73 +1,75 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, KeyboardAvoidingView } from 'react-native';
+import DataVisualization from './DataDashboard';
+import { useNavigation } from '@react-navigation/native';
 
 const DataEntryForm = () => {
   const [formData, setFormData] = useState({
-    diets: '',
-    targetCalories: '',
-    cuisines: '',
-    includeIngredients: '',
-    excludeIngredients: '',
-    preferences: '',
+    ingredients: '',
+    number: '',
   });
+
+  const [isFormValid, setIsFormValid] = useState(false);
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    validateForm();
+  }, [formData]);
 
   const handleInputChange = (name, value) => {
     setFormData({ ...formData, [name]: value });
   };
 
+  const validateForm = () => {
+    const { ingredients, number } = formData;
+    const isIngredientsValid = ingredients.trim().length > 0;
+    const isNumberValid = Number(number) >= 1 && Number(number) <= 100;
+
+    setIsFormValid(isIngredientsValid && isNumberValid);
+  };
+
   const handleSubmit = () => {
-    console.log('Form data:', formData);
+    // console.log('Form data:', formData);
+    navigation.navigate('DataVisualization');
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.form}>
-      <Text style={styles.label}>Diet</Text>
+        <Text style={styles.label}>Ingredients</Text>
         <TextInput
           style={styles.input}
-          placeholder="Enter your diet(s) details. Eg-vegetarian"
-          value={formData.diets}
-          onChangeText={(text) => handleInputChange('diets', text)}
+          placeholder="Enter the ingredient(s) that you have in your fridge.&#10;&#10;Eg- apples,flour,sugar"
+          numberOfLines={2}
+          value={formData.ingredients}
+          onChangeText={(text) => handleInputChange('ingredients', text)}
+          required={true}
+          keyboardType="default"
         />
-        <Text style={styles.label}>Target Calories</Text>
+        <Text style={styles.label}> Number</Text>
         <TextInput
           style={styles.input}
-          placeholder="Enter your target calories"
-          value={formData.targetCalories}
-          onChangeText={(text) => handleInputChange('targetCalories', text)}
+          placeholder="Enter the maximum number of recipes to return (between 1 and 100)."
+          numberOfLines={2}
+          value={formData.number}
+          onChangeText={(text) => {
+            handleInputChange('number', text)
+          }}
+          required={true}
           keyboardType="numeric"
         />
-        <Text style={styles.label}>Cuisines</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter the cuisine(s) of the recipes. Eg-indian"
-          value={formData.cuisines}
-          onChangeText={(text) => handleInputChange('cuisines', text)}
-        />
-        <Text style={styles.label}>Include Ingredients</Text>
-        <TextInput
-          style={styles.textArea}
-          placeholder="Enter the ingredient(s) that should/must be used in the recipes. Eg-tomato,cheese"
-          multiline
-          value={formData.includeIngredients}
-          onChangeText={(text) => handleInputChange('includeIngredients', text)}
-        />
-        <Text style={styles.label}>Exclude Ingredients</Text>
-        <TextInput
-          style={styles.textArea}
-          placeholder="Enter the ingredients or ingredient types that the recipes must not contain. Eg-eggs"
-          multiline
-          value={formData.excludeIngredients}
-          onChangeText={(text) => handleInputChange('excludeIngredients', text)}
-        />
-        <Text style={styles.label}>Preferences</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter your preference(s). Eg-sweet,spicy"
-          value={formData.preferences}
-          onChangeText={(text) => handleInputChange('preferences', text)}
-        />
-        <Button title="Submit" onPress={handleSubmit} />
+        {/* input validation */}
+        {formData.number && (formData.number > 100 || formData.number < 1) && (
+          <Text style={styles.errorText}>
+            Please enter a number between 1 and 100.
+          </Text>
+        )}
+        <Button title="Submit" onPress={handleSubmit} disabled={!isFormValid} />
+        {!isFormValid && (
+          <Text style={styles.errorText}>
+            Please fill out all required fields.
+          </Text>
+        )}
       </View>
     </View>
   );
@@ -103,6 +105,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 5,
   },
+  errorText: {
+    color: "red",
+    marginBottom: 20,
+  }
 });
 
 export default DataEntryForm;
