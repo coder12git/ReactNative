@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, KeyboardAvoidingView } from 'react-native';
-import DataVisualization from './DataDashboard';
 import { useNavigation } from '@react-navigation/native';
 
 const DataEntryForm = () => {
