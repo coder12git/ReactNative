@@ -1,13 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, KeyboardAvoidingView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import HandlingDataContext from '../context/HandlingDataContext';
 
 const DataEntryForm = () => {
-  const [formData, setFormData] = useState({
-    ingredients: '',
-    number: '',
-  });
-
+  const {formData, setFormData} = useContext(HandlingDataContext);
   const [isFormValid, setIsFormValid] = useState(false);
   const navigation = useNavigation();
 
@@ -29,7 +26,8 @@ const DataEntryForm = () => {
 
   const handleSubmit = () => {
     // console.log('Form data:', formData);
-    navigation.navigate('DataVisualization', {formData: formData});
+    navigation.navigate('Data Visualization');
+    // setFormData({ ...formData, ingredients: '', number: '' });
   };
 
   return (

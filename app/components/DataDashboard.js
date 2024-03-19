@@ -1,16 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native'; 4
-// import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
-// import { BarChart } from 'react-native-chart-kit';
+import React, { useState, useEffect, useContext } from 'react';
+import { View, Text, StyleSheet, ScrollView } from 'react-native'; 
 import { Table, Row, Rows } from 'react-native-table-component';
 import { Platform } from 'react-native';
+import HandlingDataContext from '../context/HandlingDataContext';
 
 const DataVisualization = ({ route }) => {
   const [mealData, setMealData] = useState([]);
-  const { formData } = route.params;
+  const { formData, resetFormData } = useContext(HandlingDataContext);
   console.log(formData);
 
-  const apiKey = '54fe1ed340324dde9577a8ba35e809fc'
+  const apiKey = '54fe1ed340324dde9577a8ba35e809fc' // Spoonacular Food Api Key
 
   useEffect(() => {
     const ingredients = formData.ingredients;
@@ -44,6 +43,7 @@ const DataVisualization = ({ route }) => {
     };
 
     fetchData();
+    resetFormData();
   }, []);
   console.log(mealData);
   //Taking data from spoonacular food api based on user input
@@ -129,7 +129,7 @@ const DataVisualization = ({ route }) => {
     },
   ];
 
-  const dummtTableData = dummyData.map((each) => (
+  const dummyTableData = dummyData.map((each) => (
     [
       each.name,
       each.calories,
@@ -174,7 +174,7 @@ const DataVisualization = ({ route }) => {
             textStyle={styles.text}
           />
           <Rows
-            data={tableData.length>0 ? tableData : dummtTableData}
+            data={tableData.length>0 ? tableData : dummyTableData}
             textStyle={styles.text}
           />
         </Table>
