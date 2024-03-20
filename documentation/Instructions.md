@@ -42,6 +42,8 @@ These were the main three libraries that I have used in my project. Other than t
 
 - Navigate to the app directory by running this command - 
   `cd app`
+- Install all dependencies by running this command inside app directory -
+  `npm install`
 - Inside the app directory, start the project using this command - 
   `npx expo start --tunnel`
 
