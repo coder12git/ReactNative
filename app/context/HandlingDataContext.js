@@ -10,7 +10,7 @@ export const HandlingDataProvider = ({ children }) => {
   });
 
   const resetFormData = () => {
-    setFormData({ingredients: '', number: ''});
+    setFormData({ ingredients: '', number: '' });
   }
 
   return (

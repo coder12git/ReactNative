@@ -1,12 +1,58 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, KeyboardAvoidingView } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import HandlingDataContext from '../context/HandlingDataContext';
+import ThemeContext from '../context/ThemeContext';
+import Icon from 'react-native-vector-icons/FontAwesome';
+
 
 const DataEntryForm = () => {
-  const {formData, setFormData} = useContext(HandlingDataContext);
+  const { formData, setFormData } = useContext(HandlingDataContext);
   const [isFormValid, setIsFormValid] = useState(false);
+  const { theme, toggleTheme } = useContext(ThemeContext);
+  const iconType = (theme === 'dark') ? 'sun-o' : 'moon-o';
   const navigation = useNavigation();
+
+  // Stylesheet
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: theme.backgroundColor,
+      paddingTop: 20,
+      paddingHorizontal: 20,
+    },
+    form: {
+      flex: 1,
+      justifyContent: 'center',
+    },
+    input: {
+      height: 40,
+      borderColor: 'grey',
+      borderWidth: 1,
+      marginBottom: 20,
+      paddingHorizontal: 10,
+      color: theme.textColor,
+    },
+    textArea: {
+      height: 80,
+      borderColor: 'grey',
+      borderWidth: 1,
+      marginBottom: 20,
+      paddingHorizontal: 10,
+      paddingTop: 10,
+      color: theme.textColor,
+    },
+    label: {
+      fontSize: 16,
+      marginBottom: 5,
+      color: theme.textColor,
+    },
+    errorText: {
+      color: "red",
+      marginBottom: 20,
+    }
+  });
+
 
   useEffect(() => {
     validateForm();
@@ -25,18 +71,21 @@ const DataEntryForm = () => {
   };
 
   const handleSubmit = () => {
-    // console.log('Form data:', formData);
     navigation.navigate('Data Visualization');
     // setFormData({ ...formData, ingredients: '', number: '' });
   };
 
   return (
     <View style={styles.container}>
+      <TouchableOpacity onPress={toggleTheme}>
+        <Icon name={iconType} size={24} color={theme.textColor} />
+      </TouchableOpacity>
       <View style={styles.form}>
         <Text style={styles.label}>Ingredients</Text>
         <TextInput
           style={styles.input}
           placeholder="Enter the ingredient(s) that you have in your fridge.&#10;&#10;Eg- apples,flour,sugar"
+          placeholderTextColor={theme.placeholderTextColor}
           numberOfLines={2}
           value={formData.ingredients}
           onChangeText={(text) => handleInputChange('ingredients', text)}
@@ -47,6 +96,7 @@ const DataEntryForm = () => {
         <TextInput
           style={styles.input}
           placeholder="Enter the maximum number of recipes to return (between 1 and 100)."
+          placeholderTextColor={theme.placeholderTextColor}
           numberOfLines={2}
           value={formData.number}
           onChangeText={(text) => {
@@ -71,41 +121,5 @@ const DataEntryForm = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#EFECEC',
-    paddingTop: 20,
-    paddingHorizontal: 20,
-  },
-  form: {
-    flex: 1,
-    justifyContent: 'center',
-  },
-  input: {
-    height: 40,
-    borderColor: 'grey',
-    borderWidth: 1,
-    marginBottom: 20,
-    paddingHorizontal: 10,
-  },
-  textArea: {
-    height: 80,
-    borderColor: 'grey',
-    borderWidth: 1,
-    marginBottom: 20,
-    paddingHorizontal: 10,
-    paddingTop: 10,
-  },
-  label: {
-    fontSize: 16,
-    marginBottom: 5,
-  },
-  errorText: {
-    color: "red",
-    marginBottom: 20,
-  }
-});
 
 export default DataEntryForm;
