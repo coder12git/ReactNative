@@ -7,7 +7,7 @@ import ThemeContext from '../context/ThemeContext';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 
-const DataVisualization = ({ route }) => {
+const DataVisualization = () => {
   const [mealData, setMealData] = useState([]);
   const { formData, resetFormData } = useContext(HandlingDataContext);
   const { theme, toggleTheme } = useContext(ThemeContext);
